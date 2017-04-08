@@ -1,11 +1,11 @@
 ### nome <- "Marina Merlo"
-### programa <- "Mestrado em CiÍncia PolÌtica"
+### programa <- "Mestrado em Ci√™ncia Pol√≠tica"
 ### n_usp <- 7197987
 ### data_entrega: "xx/xx/2017"
 
-#configurando a pasta em que os arquivos ser„o salvos
+#configurando a pasta em que os arquivos ser√£o salvos
 setwd("C:/Users/Marina/Desktop/Desafio1")
-#abrindo os pacotes que vou usar usar. Eles j· estavam instalados. 
+#abrindo os pacotes que vou usar usar. Eles j√° estavam instalados. 
 
 install.packages("readr")
 install.packages("dplyr")
@@ -32,27 +32,27 @@ unzip("temp.zip")
 file.remove("temp.zip")
 
 
-##selecionando os arquivos da regi„o Sudeste
-#(troquei o Sul pelo Sudeste porque tava pra montar o banco do municÌpio de S„o Paulo pra minha dissertaÁ„o)
+
+##selecionando os arquivos da regi√£o Sudeste
+#(troquei o Sul pelo Sudeste porque tava pra montar o banco do munic√≠pio de S√£o Paulo pra minha disserta√ß√£o)
+
+###RESULTADOS###
 
 #criando uma lista de todos os arquivos contidos na pasta
 lista.arquivos <-list.files(file.path(getwd()))
 print(lista.arquivos)
-#criando uma lista para pegar somente os documentos de votaÁ„o
+#criando uma lista para pegar somente os documentos de vota√ß√£o
 lista.resultados <- grep(pattern="votacao_candidato_munzona_2016_", lista.arquivos, value=TRUE)
 print(lista.resultados)
-
 #pegando somente os arquivos dos estados do Sudeste
 lista.resultados <- lista.resultados[c(7,10,18,25)]
 print(lista.resultados)
-
-#criando o dataframe vazio que receber· os dados
+#criando o dataframe vazio que receber√° os dados
 resultados <- data.frame()
 
 #Loop para coletar os dados que queremos:
 #vai abrir cada uma das listas, renomear as colunas de acordo com o indicado no arquivo LEIAME.
 #incluir no dataframe vazio
-
 for(arquivo in lista.resultados){
   print (arquivo)
   d <- read_delim(file.path(getwd(),arquivo), 
@@ -91,33 +91,28 @@ for(arquivo in lista.resultados){
 } 
 #removendo o banco de dados parcial ao final do empilhando
 rm(d)
-
 #checando se os quatro estados foram empilhados
 table(resultados$SIGLA_UF)
 
 
+###CANDIDATOS###
 
 ##repetindo os passos para criar o arquivo das candidaturas##
-
 #criando uma lista de todos os arquivos contidos na pasta
 lista.arquivos <-list.files(file.path(getwd()))
 print(lista.arquivos)
-#criando uma lista para pegar somente os documentos de votaÁ„o
+#criando uma lista para pegar somente os documentos de vota√ß√£o
 lista.candidatos <- grep(pattern="consulta_cand_2016_", lista.arquivos, value=TRUE)
 print(lista.candidatos)
-
 #pegando somente os arquivos dos estados do Sudeste
 lista.candidatos <- lista.candidatos[c(9,12,20,27)]
 print(lista.candidatos)
-
-#criando o dataframe vazio que receber· os dados
+#criando o dataframe vazio que receber√° os dados
 candidatos <- data.frame()
 
 #Loop para coletar os dados que queremos:
 #vai abrir cada uma das listas, renomear as colunas de acordo com o indicado no arquivo LEIAME.
 #incluir no dataframe vazio
-
-
 for(arquivo in lista.candidatos){
   print (arquivo)
   d <- read_delim(file.path(getwd(),arquivo), 
@@ -183,7 +178,6 @@ rm(d)
 #5  -- 45 columns 46 columns 'C:/Users/Marina/Desktop/Desafio1/consulta_cand_2016_SP.txt'
 #... ... .......... .......... ............................................................
 #See problems(...) for more details.
-
 #problems()
 #Error in withCallingHandlers(expr, warning = function(w) invokeRestart("muffleWarning")) : 
 #  argument "x" is missing, with no default
@@ -192,11 +186,12 @@ rm(d)
 table(candidatos$SIGLA_UF)
 
 
+
 ############################################
 ###### Parte 2 - data frame resultados #####
 ############################################
 
-#selecionando as linhas que contem resultados para vereador, deixando o banco com as vari·veis e renomeando-as
+#selecionando as linhas que contem resultados para vereador, deixando o banco com as vari√°veis e renomeando-as
 resultados <- resultados %>% 
   filter(DESCRICAO_CARGO == "PREFEITO") %>%
   select(SIGLA_UF, SIGLA_UE, CODIGO_MUNICIPIO, NOME_PARTIDO, NUMERO_CAND, TOTAL_VOTOS) %>%
@@ -211,7 +206,7 @@ resultados <- resultados %>%
 ###### Parte 3 - data frame candidatos #####
 ############################################
 
-#selecionando as linhas que contem candiadtos para vereador, deixando o banco com as vari·veis e renomeando-as
+#selecionando as linhas que contem candiadtos para vereador, deixando o banco com as vari√°veis e renomeando-as
 candidatos <- candidatos %>% 
   filter(DESC_CARGO == "PREFEITO") %>%
   select(SIGLA_UE, SIGLA_UF,NOME_PARTIDO, NUMERO_CANDIDATO, DESCRICAO_OCUPACAO, DESCRICAO_SEXO ,DESCRICAO_GRAU_INSTRUCAO) %>%
@@ -225,7 +220,7 @@ candidatos <- candidatos %>%
     educ = DESCRICAO_GRAU_INSTRUCAO)
 
 ##########################################################
-###### Parte 4 - agregando e combinando por municÌpio#####
+###### Parte 4 - agregando e combinando por munic√≠pio#####
 ##########################################################
 
 #criando um banco que tem o agregado de votos por unidade eleitoral
@@ -236,10 +231,10 @@ resultado_mun <- resultados %>%
 #adicionando o voto total por municipio no banco de resultados
 resultados_join <- inner_join(resultados, resultado_mun, by = "ue")
 
-#renomeando as vari·veis voto.x (votaÁ„o individual) e voto.y (votaÁ„o total do municipio)
+#renomeando as vari√°veis voto.x (vota√ß√£o individual) e voto.y (vota√ß√£o total do municipio)
 resultados <- resultados_join %>% rename(voto_cand = votos.x, voto_total_mun = votos.y)
 
-#criando a nova vari·vel que tem a proporÁ„o de votos recebidos
+#criando a nova vari√°vel que tem a propor√ß√£o de votos recebidos
 resultados <- resultados %>% 
   mutate(prop_mun = voto_cand / voto_total_mun)
 
@@ -255,24 +250,28 @@ resultado_cand <- resultados %>%
 #adicionando o voto total por candidato no banco de resultados
 resultados_cand_join <- inner_join(resultados, resultado_cand, by = c("uf","ue","num_cand"))
 
-#vendo como ficaram as vari·veis depois do join
+#vendo como ficaram as vari√°veis depois do join
 glimpse(resultados_cand_join)
 
-#criando a nova vari·vel que tem a proporÁ„o de votos recebidos
+#criando a nova vari√°vel que tem a propor√ß√£o de votos recebidos
 resultados <- resultados_cand_join %>% 
   mutate(prop_mun_cand = voto_cand / votos_cand)
+
+##D√öVIDA: faz sentido agregar por candidato, se cada candidato s√≥ tem voto dentro do seu munic√≠pio?
+#parece que essa etapa seria pra elei√ß√µes gerais, n√£o municipais
+#no final, cada candidato tem 100% da sua vota√ß√£o em cada municipio.
 
 ##########################################################
 ###### Parte 6 - agregando e combinando por candidato#####
 ##########################################################
 
-#juntando o banco de candidatos e o de resultados pelo left join, para que as correspondÍncia seja feita
+#juntando o banco de candidatos e o de resultados pelo left join, para que as correspond√™ncia seja feita
 #pelo banco das candidaturas
-#tambÈm deixa o banco apenas com as vari·veis ˙nicas
+#tamb√©m deixa o banco apenas com as vari√°veis √∫nicas
 resultados <- resultados %>%
   left_join(candidatos, resultados, by = c("ue", "num_cand"))
 
-#olhando quais s„o as vari·veis que ficaram no banco
+#olhando quais s√£o as vari√°veis que ficaram no banco
 glimpse(resultados)
 
 #renomeando as que ficaram repetidas no join
@@ -280,7 +279,6 @@ resultados <- resultados %>%
   rename(uf = uf.x, partido = partido.x) %>%
   select(uf, ue, cod_mun, partido, num_cand, voto_cand, voto_total_mun, prop_mun, ocup, sexo, educ)
        
-
 #removendo duplicados
 resultados <- resultados[!duplicated(resultados),]
 
@@ -295,7 +293,7 @@ resultados_partido <- resultados %>%
   summarise(votos_partido = sum(voto_cand)) %>%
   arrange(desc(votos_partido))
 
-#16- Produza uma tabela com o total de votos por ocupaÁ„o d@s candidat@s.
+#16- Produza uma tabela com o total de votos por ocupa√ß√£o d@s candidat@s.
 resultados_ocupacao <- resultados %>% 
   group_by(ocup) %>% 
   summarise(votos_ocup = sum(voto_cand)) %>%
