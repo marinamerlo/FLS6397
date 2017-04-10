@@ -1,14 +1,13 @@
 ### nome <- "Marina Merlo"
 ### programa <- "Mestrado em Ciência Política"
 ### n_usp <- 7197987
-### data_entrega: "xx/xx/2017"
+### data_entrega: "10/04/2017"
 
 #configurando a pasta em que os arquivos serão salvos
 setwd("C:/Users/Marina/Desktop/Desafio1")
 #abrindo os pacotes que vou usar usar. Eles já estavam instalados. 
-
-install.packages("readr")
-install.packages("dplyr")
+#install.packages("readr")
+#install.packages("dplyr")
 
 library(readr)
 library(dplyr)
@@ -30,8 +29,6 @@ download.file(url_cand, "temp.zip", quiet = F)
 #descompactando o arquivo e removendo o .zip da pasta
 unzip("temp.zip")
 file.remove("temp.zip")
-
-
 
 ##selecionando os arquivos da região Sudeste
 #(troquei o Sul pelo Sudeste porque tava pra montar o banco do município de São Paulo pra minha dissertação)
@@ -166,22 +163,6 @@ for(arquivo in lista.candidatos){
 } 
 #removendo o banco de dados parcial ao final do empilhando
 rm(d)
-
-##DUVIDA: AQUI DEU UM ERRO:
-#See spec(...) for full column specifications.
-#Warning: 86614 parsing failures.
-#row col   expected     actual                                                         file
-#1  -- 45 columns 46 columns 'C:/Users/Marina/Desktop/Desafio1/consulta_cand_2016_SP.txt'
-#2  -- 45 columns 46 columns 'C:/Users/Marina/Desktop/Desafio1/consulta_cand_2016_SP.txt'
-#3  -- 45 columns 46 columns 'C:/Users/Marina/Desktop/Desafio1/consulta_cand_2016_SP.txt'
-#4  -- 45 columns 46 columns 'C:/Users/Marina/Desktop/Desafio1/consulta_cand_2016_SP.txt'
-#5  -- 45 columns 46 columns 'C:/Users/Marina/Desktop/Desafio1/consulta_cand_2016_SP.txt'
-#... ... .......... .......... ............................................................
-#See problems(...) for more details.
-#problems()
-#Error in withCallingHandlers(expr, warning = function(w) invokeRestart("muffleWarning")) : 
-#  argument "x" is missing, with no default
-
 #checando se os quatro estados foram empilhados
 table(candidatos$SIGLA_UF)
 
@@ -248,7 +229,7 @@ resultado_cand <- resultados %>%
   summarise(votos_cand = sum(voto_cand))
 
 #adicionando o voto total por candidato no banco de resultados
-resultados_cand_join <- inner_join(resultados, resultado_cand, by = c("uf","ue","num_cand"))
+resultados_cand_join <- left_join(resultados, resultado_cand, by = c("uf","ue","num_cand"))
 
 #vendo como ficaram as variáveis depois do join
 glimpse(resultados_cand_join)
