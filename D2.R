@@ -103,7 +103,7 @@ lower_mean <- teste %>%
   group_by(country, data_year) %>%
   summarise(lower_seats_w_ymean = mean(lower_seats_w_per)) 
 
-#fazendo um gráfico com todos (fica sujo, mas só pra ver como que fica)
+#fazendo um gráfico com todos (fica sujo, mas só pra ver que as observações estão contínuas ao longo dos anos)
 p1 <- ggplot() + 
   geom_line(aes(y = lower_seats_w_ymean, x = as.numeric(data_year), group = as.factor(country)),
                            data = lower_mean, stat="identity") + 
