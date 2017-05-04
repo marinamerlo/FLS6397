@@ -29,7 +29,15 @@ for (link in links) {
       separate(date, into = c("day", "month"), sep = 2)
 }
 
+#dar nomes pras colunas
+#tirar os % pra virar númer
+#transformar v4 e v7 - elections - em data separada. tirar os pontos e usar separate
+#tirar v1
+#checar nomes
 
+
+
+####testes#####
 
 tabela$id <- link
 
