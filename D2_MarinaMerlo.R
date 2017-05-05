@@ -1,3 +1,12 @@
+### nome <- "Marina Merlo"
+### programa <- "Mestrado em Ciência Política"
+### n_usp <- "7197987"
+### data_entrega: "05/05/2017"
+
+#################################################################################################################
+############  RASPAGEM DE DADOS DE REPRESENTAÇÃO DE MULHERES NOS PARLAMENTOS (1997-2017) DO IPU  ################
+#################################################################################################################
+
 ##O Interparliamentary Union é uma organização internacional fundada em 1889 e trabalha junto com a ONU e todos os parlamentos
 ##associados tanto para se manter, quanto para reunir informações e fiscalizar o trabalho dos parlamentos no mundo.
 ##parte desse trabalho é o IPU Women (http://www.ipu.org/iss-e/women.htm), em que se monitora o avanço dos países 
@@ -7,6 +16,10 @@
 ##mensal dos dados desde 2003. Infelizmente, a forma como esses dados é disponibilizada complica sua coleta: há um link específico
 ##para cada atualização mensal dos dados, resultando em mais de 200 tabelas que são mostradas em webpages separadas. 
 ##Com as ferramentas de webscrapping, é possível automatizar essa coleta e rapidamente organizar os dados.
+
+#############################################
+############PREPARANDO O R ###################
+##############################################
 
 ##pacotes necessários:
 #install.packages("rvest")
@@ -18,7 +31,6 @@ library(tidyverse)
 
 #indicando onde os dados ficarão salvos
 setwd("D:/Dropbox/Mestrado/Disciplinas/Programacao")
-
 
 #############################################
 ############RASPANDO OS LINKS################
@@ -64,7 +76,6 @@ anos <- as.data.frame(links[4:226]) %>% #cria um banco de dados a partir da list
 #o script rodar mais rápido.
 selecao <- anos %>%
   filter(data_year <= 2008 & (data_month == 1 | data_month == 2 ))
-
 #retorna os links selecionados para o formato de lista:
 links <- as.list(selecao$links)
 
@@ -92,11 +103,8 @@ for (link in links) { #para cada link que está na lista de links
 #fazendo para 2009 em diante:
 selecao <- anos %>%
   filter(data_year >= 2009 & (data_month == 1 | data_month == 2))
-
 links <- as.list(selecao$links)
 dados2009 <- data.frame()
-
-#fazendo o loop para a seleção dos links de 1997 a 2008
 for (link in links) { 
   url <- paste(baseurl, link, sep = "") 
   lista.tabelas <- readHTMLTable(url) 
@@ -115,7 +123,7 @@ dados <- bind_rows(dados2009, dados2008)
 ##############################################
 
 teste <- dados %>%
-#cria de novo a data da coleta dos dados a partir da estrutura do link
+#cria de novo a data da coleta dos dados a partir da estrutura do link, como fiz para a seleção dos links:
   mutate(id = gsub("/wmn-e/arc/classif", "", id)) %>%
   mutate(id = gsub(".htm", "", id)) %>%
   separate(id, into = c("date", "data_year"), sep = 4) %>%
@@ -182,3 +190,17 @@ size=as.factor(br)),#estabelece o tamanho da linha por ser Brasil ou não
 p1
 #salva o gráfico no WD
 ggsave("boxplot_votos.png", width = 10, height = 5)
+
+##como o Brasil está? Bem mal. Vemos que sua linha é praticamente reta, enquanto muitos países conseguiram ampliar a representação de 
+#mulheres ao longo dos anos. 
+
+#############################################
+############ PRÓXIMOS PASSOS #################
+##############################################
+
+#Conseguir vincular esse dado com outros bancos com informações dos países. Infelizmente a única chave é o nome do país,
+#e sabemos como usar nomes como chaves pode ser problemático.
+
+#Conseguir formatar a informação da data das eleições. Eles mudaram ao longo dos anos a forma de reportar a data, então quando
+#tentei usar o separate, ele ficava todo bagunçado. Precisa indentificar a estrutura da data dos anos e criar um loop para arrumar
+#de acordo com cada um. 
