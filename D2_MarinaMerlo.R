@@ -108,7 +108,8 @@ dados2009 <- data.frame()
 for (link in links) { 
   url <- paste(baseurl, link, sep = "") 
   lista.tabelas <- readHTMLTable(url) 
-  tabela <- tbl_df(lista.tabelas[[3]]) %>% 
+  tabela <- tbl_df(lista.tabelas[[1]]) %>% #essa é a única diferença em relação ao loop anterior: indica a tabela 1 e não a 3 
+                                           #Queria ter conseguido incluir essa variação num loop único...
     filter(complete.cases(.)) %>% 
     mutate(id = link) 
   dados2009 <- bind_rows(dados2009, tabela) 
