@@ -103,9 +103,22 @@ lower_mean <- teste %>%
   group_by(country, data_year) %>%
   summarise(lower_seats_w_ymean = mean(lower_seats_w_per)) 
 
+#variável para indicar o brasil
+lower_mean$br <- ifelse(lower_mean$country == "Brazil", c("Brazil"), c("Others"))
+
 #fazendo um gráfico com todos (fica sujo, mas só pra ver que as observações estão contínuas ao longo dos anos)
 p1 <- ggplot() + 
-  geom_line(aes(y = lower_seats_w_ymean, x = as.numeric(data_year), group = as.factor(country)),
-                           data = lower_mean, stat="identity") + 
-  geom_point()
+  geom_line(aes(y = lower_seats_w_ymean, 
+x = as.numeric(data_year), 
+group = as.factor(country), 
+alpha=as.factor(br),
+color=as.factor(br),
+size=as.factor(br)),
+data = lower_mean, stat="identity") + 
+  geom_point()+
+  theme_bw()+
+  scale_size_manual(values = c(2, 0.3)) +		
+  scale_alpha_manual(values = c(1, 0.3)) +
+  scale_color_manual(values = c("red","black"))
+
 p1
