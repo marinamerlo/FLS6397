@@ -205,3 +205,6 @@ ggsave("boxplot_votos.png", width = 10, height = 5)
 #Conseguir formatar a informação da data das eleições. Eles mudaram ao longo dos anos a forma de reportar a data, então quando
 #tentei usar o separate, ele ficava todo bagunçado. Precisa indentificar a estrutura da data dos anos e criar um loop para arrumar
 #de acordo com cada um. 
+
+#Conseguir usar o rvest do começo ao fim. Por alguma razão, pelo rvest ele não conseguia capturar as tabelas, mas ia bem com o XML. Por 
+#isso, usei o rvest só no começo para pegar os links, e depois fiz a captura das tabelas pelo XML. 
